@@ -1,3 +1,3 @@
 # Rekognition with DeepLens
 
-![SampleImage]("./src/bezos.png")
+![SampleImage](src/bezos.png)
