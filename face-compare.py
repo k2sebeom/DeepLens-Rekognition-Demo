@@ -152,8 +152,8 @@ def infinite_infer_run():
                 resp = rekog.compare_faces(
                         SourceImage={
                             'S3Object': {
-                                'Bucket': 'rekognition-deeplens-source',
-                                'Name': 'target.jpeg'
+                                'Bucket': '{your s3 bucket}',
+                                'Name': '{your image key}'
                             }
                         },
                         TargetImage={
