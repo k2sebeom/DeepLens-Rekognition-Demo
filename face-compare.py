@@ -1,10 +1,3 @@
-#*****************************************************
-#                                                    *
-# Copyright 2018 Amazon.com, Inc. or its affiliates. *
-# All Rights Reserved.                               *
-#                                                    *
-#*****************************************************
-""" A sample lambda for face detection"""
 from threading import Thread, Event
 import os
 import json
