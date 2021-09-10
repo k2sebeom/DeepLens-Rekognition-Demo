@@ -149,26 +149,29 @@ def infinite_infer_run():
                     cloud_output[output_map[obj['label']]] = obj['prob']
             if cloud_output:
                 ret, jpeg = cv2.imencode(".jpg", frame)
-                resp = rekog.compare_faces(
-                        SourceImage={
-                            'S3Object': {
-                                'Bucket': '{your s3 bucket}',
-                                'Name': '{your image key}'
+                try:
+                    resp = rekog.compare_faces(
+                            SourceImage={
+                                'S3Object': {
+                                    'Bucket': '{your s3 bucket}',
+                                    'Name': '{your image key}'
+                                }
+                            },
+                            TargetImage={
+                                'Bytes': jpeg.tobytes()
                             }
-                        },
-                        TargetImage={
-                            'Bytes': jpeg.tobytes()
-                        }
-                    )
-                
-                matches = resp["FaceMatches"]
-                unmatches = resp["UnmatchedFaces"]
-                for face in matches:
-                    bbox = face["Face"]["BoundingBox"]
-                    mark_face(resized, bbox, label='Park Nam Chun')
-                for face in unmatches:
-                    bbox = face["BoundingBox"]
-                    mark_face(resized, bbox, label="?")
+                        )
+                    
+                    matches = resp["FaceMatches"]
+                    unmatches = resp["UnmatchedFaces"]
+                    for face in matches:
+                        bbox = face["Face"]["BoundingBox"]
+                        mark_face(frame, bbox, label='{Your face label}')
+                    for face in unmatches:
+                        bbox = face["BoundingBox"]
+                        mark_face(frame, bbox, label="")
+                except Exception as e:
+                    client.publish(topic=iot_topic, payload=str(e))
             
             # Set the next frame in the local display stream.
             local_display.set_frame_data(frame)
@@ -178,4 +181,3 @@ def infinite_infer_run():
         client.publish(topic=iot_topic, payload='Error in face detection lambda: {}'.format(ex))
 
 infinite_infer_run()
-
